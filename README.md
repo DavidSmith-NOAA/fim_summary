@@ -26,7 +26,7 @@ NLP summarization using Facebook's BART (abstractive summarizer)
 Output CSV includes forecast details, review statistics, summaries, and metadata
 
 📁 Input Data
-Review Shapefiles (zipped):
+Review Shapefiles (zipped)(Downloaded manually):
 
 NWC_FIM_v5_Reviews.zip with:
 
