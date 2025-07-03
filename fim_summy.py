@@ -25,10 +25,19 @@ import requests
 # Define summarization function
 def summarize_text(reviewcomments, summarizer):
     input_length = len(reviewcomments.split())
-    max_len = max(20, int(input_length * 0.5))  # summary ~50% of input
-    max_len = min(max_len, 60)  # cap at 60 tokens
-    summary = summarizer(reviewcomments, max_length=max_len, min_length=10, do_sample=False)
+    max_len = max(30, int(input_length * 0.6))  # summary ~60% of input
+    max_len = min(max_len, 120)  # cap at 120 tokens for longer summaries
+    
+    summary = summarizer(
+        reviewcomments,
+        max_length=120,       # Allow longer summaries
+        min_length=30,        # Ensure summaries are at least this long
+        do_sample=False,
+        early_stopping=True   # Stop at natural sentence boundaries if possible
+    )
+
     return summary[0]['summary_text']
+
 
 #Define the function to extract impact statments from nwps api
 def fetch_and_extract_stage_statements(api_url):
@@ -170,7 +179,7 @@ fim_reviews = fim_reviews.loc[(fim_reviews['Status'] == "moderate") | (fim_revie
 fim_reviews['SecValue'] = fim_reviews['SecValue'].astype(float)
 #convert kcfs to cfs as fim reiew flows are in cfs
 fim_reviews['SecValue'] = fim_reviews['SecValue']*1000
-fim_reviews = fim_reviews[fim_reviews['Flow'] < fim_reviews['SecValue']*1.1]
+fim_reviews = fim_reviews[fim_reviews['Flow'] < fim_reviews['SecValue']*1.2]
 
 
 #%%
